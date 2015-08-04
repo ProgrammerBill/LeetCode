@@ -4,7 +4,7 @@
 using namespace std;
 
 void Combination(char *A);
-void ReverseCombination(char * A,int i,vector<char> &One);
+void RecursiveCombination(char * A,int i,vector<char> &One);
 int main(){
  char str[] = "abc";
  Combination(str);
@@ -16,7 +16,7 @@ void Combination(char * A){
   int size = strlen(A);
   vector<char> oneLine;
   for(int i = 1 ;i <= size; i++){
-    ReverseCombination(A,i,oneLine); 
+    RecursiveCombination(A,i,oneLine); 
   }
 }
 
@@ -40,7 +40,7 @@ void ReverseCombination(char * A,int i,vector<char> &One){
     reverse to next step,and get i element
     * */
    One.push_back(*A);
-   ReverseCombination(A + 1,i - 1,One);
+   RecursiveCombination(A + 1,i - 1,One);
    One.pop_back();
-   ReverseCombination(A + 1,i,One);
+   RecursiveCombination(A + 1,i,One);
 }
