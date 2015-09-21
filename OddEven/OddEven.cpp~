@@ -1,0 +1,25 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+void OddFirstEvenEnd(vector<int>&array){
+    if(array.empty() || array.size() == 1) return;
+    int head = 0;
+    int Single = head;
+    int end = array.size() - 1;
+    while(head <= end){
+        while(array[head] % 2 == 1 && head <= end){
+             swap(array[head],array[Single]);
+	     Single++;
+	}
+        head++;
+    } 
+}
+int main(){
+ int array[] = {1,2,3,4,5,6,7};
+ vector<int> A(array,array + 7);
+ OddFirstEvenEnd(A);
+ for(vector<int>::const_iterator itr = A.begin();itr != A.end();++itr){
+     cout<<*itr<<" ";
+ }
+ return 0;
+}
