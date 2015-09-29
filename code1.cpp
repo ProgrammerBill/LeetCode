@@ -1,59 +1,45 @@
 #include<iostream>
 #include<vector>
-#include<string>
-#include<cstring>
-#include<cstdlib>
+#include<map>
+#include<queue>
 using namespace std;
-int main(){
-  string str;
-  getline(std::cin,str);
-  size_t pos = 0;
-  int m = 0,n = 0;
-  vector<vector<int> >Map;
-  while((pos = str.find(';')) != string::npos){
-      vector<int> line;
-      string Oneline = str.substr(0,pos);
-      size_t sp =0;
-      while((sp = Oneline.find(' ')) != string::npos){
-           int digit = atoi(Oneline.substr(0,sp).c_str());
-	   line.push_back(digit); 
-	   Oneline = Oneline.substr(sp + 1);
-      }
-      line.push_back(atoi(Oneline.c_str()));
-      n = line.size();
-      Map.push_back(line);
-      str = str.substr(pos + 1);
-      if(str.find(';') == string::npos){
-	  Oneline = str;
-	  line.clear();
-          while((sp = Oneline.find(' ')) != string::npos){
-            int digit = atoi(Oneline.substr(0,sp).c_str());
-	    line.push_back(digit); 
-	    Oneline = Oneline.substr(sp + 1);
-          }
-	  line.push_back(atoi(Oneline.c_str()));
-          Map.push_back(line);
-      }
-  }
-  
+typedef multimap<int,int>::iterator it;
+int Count(multimap<int,int>& map,int n,int m);
 
-  /*  
-  for(size_t i = 0 ; i < Map.size();i++){
-	  for(int j = 0; j < n;j++){
-	      cout<<Map[i][j]<<" "; 
-	  }
-          cout<<endl;
+int main(){
+ int N,M;
+ while(cin>>N>>M){
+  if(N == 0 && M == 0) break;
+  multimap<int,int>Map;
+  int first,second;
+  for(int i = 0; i < M;i++){
+      cin>>first>>second; 
+      Map.insert(make_pair(first,second));  
+      Map.insert(make_pair(second,first));  
   }
-  */
-  int sum = 0;
-  m = Map.size();
-  for(int i = 0 ; i < m - 1;i++){
-      for(int j = 0 ; j < n - 1;j++){
-          if(Map[i][j] + Map[i][j + 1] + Map[i + 1][j] + Map[i + 1][j+ 1] > sum){
-	     sum = Map[i][j] + Map[i][j + 1] + Map[i + 1][j] + Map[i + 1][j+ 1];
-	  } 
-      }
-  }
-  cout<<sum<<endl;
-  return 0;
+  cout<<Count(Map,N,M)<<endl;
+ }
+ return 0;
+}
+
+int Count(multimap<int,int>&map,int n,int m){
+    int count = -1;
+    queue<int> q1;
+    q1.push(1);
+    int tmp;
+    vector<bool>abandon(n,false);
+    abandon[0] = true;
+    while(!q1.empty()){ 
+       tmp = q1.front(); 
+       q1.pop();
+       count++;
+       abandon[tmp - 1] = true;
+       it beg = map.lower_bound(tmp);
+       while(beg != map.upper_bound(tmp)){
+           if(abandon[beg->second - 1] == false)
+	       q1.push(beg->second);
+           ++beg;	   
+       }
+    }
+    return count;
 }
